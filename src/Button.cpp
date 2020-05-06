@@ -1,9 +1,9 @@
 #include "Button.h"
 
-Button::Button(){
+Button::Button(void (*action)(bool leftClick)) : action(action){
 
 }
 
-void Button::click(){
-
+void Button::click(bool leftClick){
+    action(leftClick);
 }

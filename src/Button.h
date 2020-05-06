@@ -5,9 +5,10 @@
 
 class Button{
     public:
-        Button();
-        void click();
+        Button(void (*action)(bool leftClick));
+        void click(bool leftClick);
     private:
+        void (*action)(bool leftClick);
         XY xy;
         int width, height;
         bool visible;
