@@ -1,3 +1,15 @@
+SnakesSimulation
+
+check.txt
+
+build/*
+
+.directory
+
+# Code blocks files
+*.depend
+*.layout
+
 # Prerequisites
 *.d
 
@@ -24,7 +36,7 @@
 *.lai
 *.la
 *.a
-*.lib
+#*.lib
 
 # Executables
 *.exe
