@@ -1,6 +1,10 @@
 # SnakesSimulation
-## Compile with make
+## Used libs
+* opengl
+* sfml
+## Compile with make on Linux
 * git clone git@github.com:DENNKA/SnakesSimulation.git
+* Install libsfml-dev and mesa-utils (opengl) from package manager
 * cd SnakesSimulation
 * make (make debug)
 * ./SnakesSimulation
@@ -13,7 +17,7 @@
 * Build
 ### Linux
 * git clone git@github.com:DENNKA/SnakesSimulation.git
-* Install libsfml-dev
+* Install libsfml-dev and mesa-utils (opengl) from package manager
 * Open SnakesSimulation.cbp
 * Project - Build options - Linker settings - Other linker options  change -lopengl32 to -lGL
 * On the left side switch to debug and delete "-d" in all libs
