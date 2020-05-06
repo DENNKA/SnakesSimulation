@@ -14,6 +14,7 @@ class Simulation{
         Simulation();
         void start();
         void stop();
+        void invertSimulation();
         void shutdown();
         ~Simulation();
     private:

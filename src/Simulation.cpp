@@ -93,6 +93,10 @@ void Simulation::shutdown(){
     this->~Simulation();
 }
 
+void Simulation::invertSimulation(){
+    simulation = !simulation;
+}
+
 Simulation::~Simulation(){
 
 }
