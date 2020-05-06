@@ -1,3 +1,15 @@
+SnakesSimulation
+
+check.txt
+
+build/*
+
+.directory
+
+# Code blocks files
+*.depend
+*.layout
+
 # Prerequisites
 *.d
 

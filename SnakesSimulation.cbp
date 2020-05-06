@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="SnakesSimulation" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="debug">
+				<Option output="bin/Debug/SnakesSimulation" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="src" />
+				</Compiler>
+				<Linker>
+					<Add library="sfml-graphics-d" />
+					<Add library="sfml-window-d" />
+					<Add library="sfml-system-d" />
+				</Linker>
+			</Target>
+			<Target title="release">
+				<Option output="bin/Release/SnakesSimulation" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="src" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wextra" />
+			<Add option="-Wall" />
+			<Add directory="D:/Denis/Code/ext/SFML-2.5.0/include" />
+		</Compiler>
+		<Linker>
+			<Add option="-lopengl32" />
+			<Add directory="D:/Denis/Code/ext/SFML-2.5.0/lib" />
+		</Linker>
+		<Unit filename="src/Button.cpp" />
+		<Unit filename="src/Button.h" />
+		<Unit filename="src/Defines.h" />
+		<Unit filename="src/Gui.cpp" />
+		<Unit filename="src/Gui.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="src/Render.cpp" />
+		<Unit filename="src/Render.h" />
+		<Unit filename="src/Simulation.cpp" />
+		<Unit filename="src/Simulation.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="src/Snake.cpp" />
+		<Unit filename="src/Snake.h" />
+		<Unit filename="src/World.cpp" />
+		<Unit filename="src/World.h" />
+		<Unit filename="src/XY.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="src/main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
