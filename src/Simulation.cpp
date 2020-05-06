@@ -1,6 +1,6 @@
 #include "Simulation.h"
 
-Simulation::Simulation() : world(100, 65), render(window, world, gui){
+Simulation::Simulation() : world(100, 65), render(window, world, gui), gui(*this, world){
 
 }
 
@@ -83,6 +83,14 @@ void Simulation::start(){
 
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
+}
+
+void Simulation::stop(){
+    simulation = false;
+}
+
+void Simulation::shutdown(){
+    this->~Simulation();
 }
 
 Simulation::~Simulation(){

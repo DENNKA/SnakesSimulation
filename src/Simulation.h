@@ -13,13 +13,15 @@ class Simulation{
     public:
         Simulation();
         void start();
+        void stop();
+        void shutdown();
         ~Simulation();
     private:
         bool simulation = false;
         sf::RenderWindow window;
         World world;
-        Gui gui;
         render::Render render;
+        Gui gui;
         bool focusOnWindow = true;
 };
 
