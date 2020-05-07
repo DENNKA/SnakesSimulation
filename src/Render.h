@@ -20,6 +20,7 @@ namespace render{
         public:
             Render(sf::RenderWindow& window, World& world, Gui& gui);
             void render();
+            void renderButtons();
             void renderCursor(XY cursor);
             void updateSizeWindow();
             void setSizes(int sizeSquare, int sizeSpace);

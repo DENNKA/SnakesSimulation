@@ -33,9 +33,12 @@ void Simulation::start(){
                 case sf::Event::MouseButtonPressed:{
                         sf::Vector2i cursorClick = sf::Mouse::getPosition(window);
                         XY xy = render.getXYSquare(static_cast<XY>(cursorClick));
+                        bool leftClick = true;
+                        gui.click((XY)cursorClick, leftClick);
                         Snake* snake = world.getSnake(xy);
                         if (snake){
                             snake->addOneTail();
+                            
                         }
                     }
                 break;
@@ -96,6 +99,8 @@ void Simulation::shutdown(){
 void Simulation::invertSimulation(){
     simulation = !simulation;
 }
+
+XY Simulation::getWindowSize(){return window.getSize();} 
 
 Simulation::~Simulation(){
 

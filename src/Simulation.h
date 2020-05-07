@@ -15,6 +15,7 @@ class Simulation{
         void start();
         void stop();
         void invertSimulation();
+        XY getWindowSize();
         void shutdown();
         ~Simulation();
     private:

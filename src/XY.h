@@ -5,7 +5,8 @@
 
 struct XY{
     XY(){};
-    XY(sf::Vector2i v2i) : x(v2i.x), y(v2i.y){};
+    template <typename T>
+    XY(sf::Vector2<T> v2) : x(v2.x), y(v2.y){};
     XY(int x, int y) : x(x), y(y){}
     int x, y;
 };

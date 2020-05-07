@@ -33,6 +33,21 @@ namespace render{
             }
         }
         glEnd();
+        renderButtons();
+    }
+
+    void Render::renderButtons(){
+        glBegin(GL_QUADS);
+        for (int i = 0; i < (int)gui.getButtonsAmount(); i++){
+            const XY& xy = gui.getXYButton(i);
+            const XY& size = gui.getSizeButton(i);
+            int halfside = gui.getSizeButton(i).x / 2;
+            glVertex2i(xy.x, xy.y);   //top left
+            glVertex2i(xy.x + size.x, xy.y);   //top right
+            glVertex2i(xy.x + size.x, xy.y + size.y);   //bottom right
+            glVertex2i(xy.x, xy.y + size.y);   //bottom leht
+        }
+        glEnd();
     }
 
     void Render::renderCursor(XY cursor){

@@ -2,16 +2,26 @@
 #define BUTTON_H
 
 #include "XY.h"
+#include "World.h"
+
+class Simulation;
 
 class Button{
     public:
-        Button(void (*action)(bool leftClick));
+        Button(Simulation& simulation, World& world, void (Button::*action)(bool leftClick), XY xy, XY size);
         void click(bool leftClick);
+        XY getXY();
+        XY getSize();
+        
+        void invertSimulation(bool leftClick);
     private:
-        void (*action)(bool leftClick);
+        Simulation& simulation;
+        World& world;
+        void (Button::*action)(bool leftClick);
         XY xy;
-        int width, height;
+        XY size;
         bool visible;
+        bool invert = false;
 };
 
 #endif // BUTTON_H
