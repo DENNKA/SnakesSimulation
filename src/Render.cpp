@@ -15,7 +15,7 @@ namespace render{
         setSizes(sizeSquare,sizeSpace);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        if (!font.loadFromFile("fonts/arial.ttf")){
+        if (!font.loadFromFile("fonts/LiberationSans-Regular.ttf")){
             std::cout<<"Font not exist";
             std::cin.get();
         }
