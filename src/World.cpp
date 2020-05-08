@@ -138,6 +138,10 @@ void World::addEgg(XY xy, int snakeSize, int saturation, int generation, Genes g
     snakes.push_front(Snake(true, *this, xy, snakeSize, saturation, generation, (Sex)(rand() % 2), genes));
 }
 
+void World::changeFoodPerTick(int up){
+    foodPerTick += up;
+}
+
 std::vector<std::string> World::test(){
     #ifdef __linux__
     #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)

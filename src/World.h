@@ -43,6 +43,7 @@ class World{
         Snake* getSnake(XY xy);
         int boundsCheck(XY xy); //return 1 when in xy in bounds
         void addEgg(XY xy, int snakeSize, int saturation, int generation, Genes genes);
+        void changeFoodPerTick(int up);
     private:
         std::vector<std::string> test();
         XY size;
