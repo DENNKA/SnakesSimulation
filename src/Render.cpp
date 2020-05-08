@@ -17,8 +17,14 @@ namespace render{
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
-    void Render::render(){
-        glBegin(GL_POINTS);
+    void Render::render(XY cursorSquare){
+        renderWorld();
+        renderCursorXYSquare(cursorSquare);
+        renderGui();
+    }
+
+    void Render::renderWorld(){
+        glBegin(GL_QUADS);
         for (int i = 0; i < world.getSize().y; i++){
             for (int j = 0; j < world.getSize().x; j++){
                 switch (world.getChar(XY(j,i))){
@@ -30,31 +36,40 @@ namespace render{
                     case egg: glColor3f(0.5, 0.4, 0.2); break;
                 }
                 glVertex2f(j * (sizeSquare + sizeSpace) + shiftX, i * (sizeSquare + sizeSpace) + shiftY);
+                glVertex2f(j * (sizeSquare + sizeSpace) + shiftX + sizeSquare, i * (sizeSquare + sizeSpace) + shiftY);
+                glVertex2f(j * (sizeSquare + sizeSpace) + shiftX + sizeSquare, i * (sizeSquare + sizeSpace) + shiftY + sizeSquare);
+                glVertex2f(j * (sizeSquare + sizeSpace) + shiftX, i * (sizeSquare + sizeSpace) + shiftY + sizeSquare);
             }
         }
         glEnd();
-        renderButtons();
     }
 
-    void Render::renderButtons(){
+    void Render::renderGui(){
         glBegin(GL_QUADS);
+        glColor3f(1, 0.3, 1);
         for (int i = 0; i < (int)gui.getButtonsAmount(); i++){
             const XY& xy = gui.getXYButton(i);
             const XY& size = gui.getSizeButton(i);
-            int halfside = gui.getSizeButton(i).x / 2;
             glVertex2i(xy.x, xy.y);   //top left
             glVertex2i(xy.x + size.x, xy.y);   //top right
             glVertex2i(xy.x + size.x, xy.y + size.y);   //bottom right
-            glVertex2i(xy.x, xy.y + size.y);   //bottom leht
+            glVertex2i(xy.x, xy.y + size.y);   //bottom left
         }
         glEnd();
     }
 
     void Render::renderCursor(XY cursor){
-        glBegin(GL_POINTS);
-        auto xy = getXYSquare(cursor);
-        glColor4f(1, 1, 1, 0.5);
-        glVertex2f(xy.x * (sizeSquare + sizeSpace) + shiftX, xy.y * (sizeSquare + sizeSpace) + shiftY);
+        renderCursor(getXYSquare(cursor));
+    }
+
+    void Render::renderCursorXYSquare(XY cursorSquare){
+        if (!world.boundsCheck(cursorSquare)) return;
+        glBegin(GL_QUADS);
+        glColor4f(1, 1, 1, 0.5);    //TODO: need normal way to definition color
+        glVertex2f(cursorSquare.x * (sizeSquare + sizeSpace) + shiftX, cursorSquare.y * (sizeSquare + sizeSpace) + shiftY);
+        glVertex2f(cursorSquare.x * (sizeSquare + sizeSpace) + shiftX + sizeSquare, cursorSquare.y * (sizeSquare + sizeSpace) + shiftY);
+        glVertex2f(cursorSquare.x * (sizeSquare + sizeSpace) + shiftX + sizeSquare, cursorSquare.y * (sizeSquare + sizeSpace) + shiftY + sizeSquare);
+        glVertex2f(cursorSquare.x * (sizeSquare + sizeSpace) + shiftX, cursorSquare.y * (sizeSquare + sizeSpace) + shiftY + sizeSquare);
         glEnd();
     }
 
@@ -66,7 +81,6 @@ namespace render{
     void Render::setSizes(int sizeSquare, int sizeSpace){
         this->sizeSquare = sizeSquare;
         this->sizeSpace = sizeSpace;
-        glPointSize(sizeSquare);
     }
 
     void Render::shift(int shiftX, int shiftY){
@@ -118,8 +132,8 @@ namespace render{
             xy.x = -1, xy.y= -1;
             return xy;
         }*/
-        xy.y = (cursor.y + sizeSquare / 2 - shiftY) / (sizeSquare + sizeSpace);
-        xy.x = (cursor.x + sizeSquare / 2 - shiftX) / (sizeSquare + sizeSpace);
+        xy.y = (cursor.y - shiftY) / (sizeSquare + sizeSpace);
+        xy.x = (cursor.x - shiftX) / (sizeSquare + sizeSpace);
         return xy;
     }
 }

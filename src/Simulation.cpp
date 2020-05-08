@@ -38,7 +38,7 @@ void Simulation::start(){
                         Snake* snake = world.getSnake(xy);
                         if (snake){
                             snake->addOneTail();
-                            
+
                         }
                     }
                 break;
@@ -78,9 +78,10 @@ void Simulation::start(){
         if (simulation){
             world.update();
         }
-        render.render();
+
         sf::Vector2i cursor = sf::Mouse::getPosition(window);
-        render.renderCursor(cursor);
+        XY cursorSquare = render.getXYSquare(cursor);
+        render.render(cursorSquare);
 
         window.display();
 
@@ -100,7 +101,7 @@ void Simulation::invertSimulation(){
     simulation = !simulation;
 }
 
-XY Simulation::getWindowSize(){return window.getSize();} 
+XY Simulation::getWindowSize(){return window.getSize();}
 
 Simulation::~Simulation(){
 

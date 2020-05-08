@@ -19,9 +19,11 @@ namespace render{
     class Render{
         public:
             Render(sf::RenderWindow& window, World& world, Gui& gui);
-            void render();
-            void renderButtons();
+            void render(XY cursorSquare);
+            void renderWorld();
+            void renderGui();
             void renderCursor(XY cursor);
+            void renderCursorXYSquare(XY cursorSquare);
             void updateSizeWindow();
             void setSizes(int sizeSquare, int sizeSpace);
             void shift(int shiftX, int shiftY);

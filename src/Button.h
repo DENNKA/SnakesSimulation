@@ -12,7 +12,7 @@ class Button{
         void click(bool leftClick);
         XY getXY();
         XY getSize();
-        
+
         void invertSimulation(bool leftClick);
     private:
         Simulation& simulation;
