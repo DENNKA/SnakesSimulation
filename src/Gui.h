@@ -19,14 +19,17 @@ class Gui{
         unsigned getButtonsAmount();
         XY getXYButton(unsigned int i);
         XY getSizeButton(unsigned int i);
+        std::string getNameButton(unsigned int i);
+        XY getXYNameButton(unsigned int i);
         XY getSize();
     private:
         XY size;
         XY posNextButton;
-        void addBigButton(void (Button::*action)(bool leftClick));
-        void addSmallButton(void (Button::*action)(bool leftClick));
+        void addBigButton(void (Button::*action)(bool leftClick), std::string name);
+        void addSmallButton(void (Button::*action)(bool leftClick), std::string name);
         void updateSize();
         std::vector<Button> buttons;
+        int buttonsSpace = 3;
         Simulation& simulation;
         World& world;
 };

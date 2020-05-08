@@ -15,12 +15,31 @@ namespace render{
         setSizes(sizeSquare,sizeSpace);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        if (!font.loadFromFile("fonts/arial.ttf")){
+            std::cout<<"Font not exist";
+            std::cin.get();
+        }
+    }
+
+    void Render::initButtonsName(){
+        buttonsText.reserve(gui.getButtonsAmount());
+        for (int i = 0; i < gui.getButtonsAmount(); i++){
+            sf::Text text;
+            text.setFont(font);
+            text.setString(gui.getNameButton(i));
+            text.setPosition(gui.getXYNameButton(i).x, gui.getXYNameButton(i).y);
+            text.setCharacterSize(characterSize);
+            buttonsText.push_back(text);
+        }
     }
 
     void Render::render(XY cursorSquare){
         renderWorld();
         renderCursorXYSquare(cursorSquare);
         renderGui();
+        window.pushGLStates();  //sfml render
+        renderTexts();
+        window.popGLStates();
     }
 
     void Render::renderWorld(){
@@ -46,7 +65,7 @@ namespace render{
 
     void Render::renderGui(){
         glBegin(GL_QUADS);
-        glColor3f(1, 0.3, 1);
+        glColor3f(0.16, 0.19, 0.20);
         for (int i = 0; i < (int)gui.getButtonsAmount(); i++){
             const XY& xy = gui.getXYButton(i);
             const XY& size = gui.getSizeButton(i);
@@ -71,6 +90,12 @@ namespace render{
         glVertex2f(cursorSquare.x * (sizeSquare + sizeSpace) + shiftX + sizeSquare, cursorSquare.y * (sizeSquare + sizeSpace) + shiftY + sizeSquare);
         glVertex2f(cursorSquare.x * (sizeSquare + sizeSpace) + shiftX, cursorSquare.y * (sizeSquare + sizeSpace) + shiftY + sizeSquare);
         glEnd();
+    }
+
+    void Render::renderTexts(){
+        for (auto& it : buttonsText){
+            window.draw(it);
+        }
     }
 
     void Render::updateSizeWindow(){

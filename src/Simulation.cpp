@@ -1,7 +1,7 @@
 #include "Simulation.h"
 
 Simulation::Simulation() : world(100, 65), render(window, world, gui), gui(*this, world){
-
+    render.initButtonsName();
 }
 
 void Simulation::start(){
@@ -31,16 +31,22 @@ void Simulation::start(){
                     render.updateSizeWindow();
                 break;
                 case sf::Event::MouseButtonPressed:{
-                        sf::Vector2i cursorClick = sf::Mouse::getPosition(window);
-                        XY xy = render.getXYSquare(static_cast<XY>(cursorClick));
-                        bool leftClick = true;
-                        gui.click((XY)cursorClick, leftClick);
-                        Snake* snake = world.getSnake(xy);
-                        if (snake){
-                            snake->addOneTail();
-
-                        }
+                    bool leftClick;
+                    if (event.mouseButton.button == sf::Mouse::Left){
+                        leftClick = true;
                     }
+                    else{
+                        leftClick = false;
+                    }
+                    sf::Vector2i cursorClick = sf::Mouse::getPosition(window);
+                    XY xy = render.getXYSquare(static_cast<XY>(cursorClick));
+                    gui.click((XY)cursorClick, leftClick);
+                    Snake* snake = world.getSnake(xy);
+                    if (snake){
+                        snake->addOneTail();
+
+                    }
+                }
                 break;
                 default:;
             }
@@ -78,7 +84,6 @@ void Simulation::start(){
         if (simulation){
             world.update();
         }
-
         sf::Vector2i cursor = sf::Mouse::getPosition(window);
         XY cursorSquare = render.getXYSquare(cursor);
         render.render(cursorSquare);
