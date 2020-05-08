@@ -1,10 +1,11 @@
 # SnakesSimulation
+Original makefile https://github.com/mbcrawfo/GenericMakefile
 ## Used libs
 * opengl
 * sfml
 ## Compile with make on Linux
 * git clone git@github.com:DENNKA/SnakesSimulation.git  (or download zip)
-* Install libsfml-dev and mesa-utils (opengl) from package manager
+* Install sfml (libsfml-dev) from package manager
 * cd SnakesSimulation
 * make (make debug)
 * ./SnakesSimulation
