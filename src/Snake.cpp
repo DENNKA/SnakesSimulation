@@ -182,6 +182,18 @@ void Snake::removeOneTail(){
 }
 
 int Snake::getWeight(Dir dir, int x, int y){
+    XY xy = getWeightXY(dir, x, y);
+    return genes.weights[dir][xy.y][xy.x];
+}
+
+void Snake::setWeight(Dir dir, int x, int y, int value){
+    XY xy = getWeightXY(dir, x, y);
+    genes.weights[dir][xy.y][xy.x] = value;
+}
+
+bool Snake::getLive(){return live;}
+
+XY Snake::getWeightXY(Dir dir, int x, int y){
     y = (genes.viewCells * 2 + 1) - y - 1;
     if (dir % 2 == 1){
         if (y > genes.viewCells){
@@ -193,10 +205,8 @@ int Snake::getWeight(Dir dir, int x, int y){
             x = -(x - genes.viewCells * 2);
         }
     }
-    return genes.weights.at(dir).at(y).at(x);
+    return XY(x, y);
 }
-
-bool Snake::getLive(){return live;}
 
 void Snake::die(bool deleteHeadOnWorld){
     if (!deleteHeadOnWorld){

@@ -50,9 +50,11 @@ class Snake{
         void addOneTail();
         void removeOneTail();
         int getWeight(Dir dir, int x, int y);
+        void setWeight(Dir dir, int x, int y, int value);
         bool getLive();
 
     private:
+        XY getWeightXY(Dir dir, int x, int y);
         void die(bool deleteHeadOnWorld);
         void reproduction();
         bool isEgg = false;
