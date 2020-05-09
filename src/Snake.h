@@ -36,27 +36,30 @@ struct Genes{
 enum Dir{
     DIR(food)
     DIR(wall)
+
+    dirEnd
 };
 
 class World;
 
 class Snake{
     public:
-        Snake(World& world, XY xy, int snakeSize, int saturation, int generation, Sex sex, Genes genes);
-        Snake(bool isEgg, World& world, XY xy, int snakeSize, int saturation, int generation, Sex sex, Genes genes);
+        Snake(World& world, XY xy, int snakeSize, int saturation, int generation, Sex sex, Genes& genes);
+        Snake(bool isEgg, World& world, XY xy, int snakeSize, int saturation, int generation, Sex sex, Genes& genes);
         void loadGenesFromFile(std::string file);
         void unloadGenesIntoFile(std::string file);
         void update();
         void addOneTail();
         void removeOneTail();
         int getWeight(Dir dir, int x, int y);
-        void setWeight(Dir dir, int x, int y, int value);
+        void setWeight(Genes& genes, Dir dir, int x, int y, int value);
         bool getLive();
 
     private:
         XY getWeightXY(Dir dir, int x, int y);
         void die(bool deleteHeadOnWorld);
         void reproduction();
+        Genes makeMutation();
         bool isEgg = false;
         World& world;
         std::list<XY> xySnake;  //coordinates of head [0] and tail [1-...]
@@ -66,6 +69,8 @@ class Snake{
         int saturationTimer = 0;
         int generation;
         bool readyForReproduction = false;
+        int mutationWeightCount = 1;    //if mutationWeightCount == -5 mutation chance 20%; if == 5 mutation will be 5 times
+        int mutationWeightNumber = 3;
         Sex sex;
         Genes genes;
 };

@@ -1,14 +1,14 @@
 #include "Snake.h"
 #include "World.h"
 
-Snake::Snake(World& world, XY xy, int snakeSize, int saturation, int generation, Sex sex, Genes genes)
+Snake::Snake(World& world, XY xy, int snakeSize, int saturation, int generation, Sex sex, Genes& genes)
     : world(world), saturation(saturation), generation(generation), sex(sex), genes(genes){
     for (int i = 0; i < snakeSize; i++){
         xySnake.push_back(xy);
     }
 }
 
-Snake::Snake(bool isEgg, World& world, XY xy, int snakeSize, int saturation, int generation, Sex sex, Genes genes)
+Snake::Snake(bool isEgg, World& world, XY xy, int snakeSize, int saturation, int generation, Sex sex, Genes& genes)
     : isEgg(isEgg), world(world), saturation(saturation), generation(generation), sex(sex), genes(genes){
     for (int i = 0; i < snakeSize; i++){
         xySnake.push_back(xy);
@@ -186,7 +186,7 @@ int Snake::getWeight(Dir dir, int x, int y){
     return genes.weights[dir][xy.y][xy.x];
 }
 
-void Snake::setWeight(Dir dir, int x, int y, int value){
+void Snake::setWeight(Genes& genes, Dir dir, int x, int y, int value){
     XY xy = getWeightXY(dir, x, y);
     genes.weights[dir][xy.y][xy.x] = value;
 }
@@ -230,6 +230,20 @@ void Snake::reproduction(){
             world.setChar(*it, none);
         }
         xySnake.erase(it, --xySnake.end());
-        world.addEgg(xySnake.back(), genes.startSize, genes.saturationStart, generation + 1, genes);
+        world.addEgg(xySnake.back(), genes.startSize, genes.saturationStart, generation + 1, makeMutation());
     }
+}
+
+Genes Snake::makeMutation(){
+    Genes newGenes = genes;
+    if (mutationWeightCount < 0) mutationWeightCount = ((rand() % mutationWeightCount) == 0);
+    for (int i = 0; i < mutationWeightCount; i++){
+        Dir dir = (Dir)(rand() % dirEnd);
+        const int view = genes.viewCells * 2 + 1;
+        int x = rand() % view;
+        int y = rand() % view;
+        int value = rand() % mutationWeightNumber - mutationWeightNumber / 2;
+        setWeight(newGenes, dir, x, y, getWeight(dir, x, y) + value);
+    }
+    return newGenes;
 }
