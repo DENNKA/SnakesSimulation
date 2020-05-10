@@ -74,14 +74,12 @@ void World::generateFood(){
 
 void World::update(){
     generateFood();
-    int snakesSize = 0;
-    for (auto &it : snakes){
-        if (it.getLive()){
-            it.update();
-            snakesSize++;
+    for (auto it = snakes.begin(); it != snakes.end(); ++it){
+        if ((*it).getLive()){
+            (*it).update();
         }
         else{
-
+            it = snakes.erase(it);
         }
     }
 }

@@ -2,7 +2,7 @@
 #define WORLD_H_INCLUDED
 
 #include <vector>
-#include <forward_list>
+#include <list>
 #include <cstdlib>  //rand()
 #include <ctime>
 
@@ -48,7 +48,7 @@ class World{
         std::vector<std::string> test();
         XY size;
         std::vector<std::vector<Tile>> world;
-        std::forward_list<Snake> snakes;
+        std::list<Snake> snakes;
         int foodPerTick = 1;
         int foodTicks = 0;
 };
