@@ -22,14 +22,21 @@ class Gui{
         std::string getNameButton(unsigned int i);
         XY getXYNameButton(unsigned int i);
         XY getSize();
+        enum ButtonType{
+            big,
+            small
+        };
     private:
+        void addButton(ButtonType buttonType, void (Button::*action)(bool leftClick), std::string name);
+        void updateSize();
+        const int sizeBigButton = 60;
+        const int widthOneSymbol = 17;
+        const int buttonsSpace = 3;
+        std::string prevName;
+        int smallButtonNubmer = 0;
         XY size;
         XY posNextButton;
-        void addBigButton(void (Button::*action)(bool leftClick), std::string name);
-        void addSmallButton(void (Button::*action)(bool leftClick), std::string name);
-        void updateSize();
         std::vector<Button> buttons;
-        int buttonsSpace = 3;
         Simulation& simulation;
         World& world;
 };

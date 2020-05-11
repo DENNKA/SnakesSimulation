@@ -4,9 +4,9 @@
 Gui::Gui(Simulation& simulation, World& world) : simulation(simulation), world(world){
     posNextButton.x = 0;
     posNextButton.y = simulation.getWindowSize().y - 60;
-    addBigButton(&Button::invertSimulation, "Start");
-    addBigButton(&Button::upFoodPerTick, "+food");
-    addBigButton(&Button::DownFoodPerTick, "-food");
+    addButton(big, &Button::invertSimulation, "Start");
+    addButton(small, &Button::upFoodPerTick, "+food");
+    addButton(small, &Button::DownFoodPerTick, "-food");
     //updateSize();
 }
 
@@ -32,15 +32,39 @@ XY Gui::getXYNameButton(unsigned int i){return buttons[i].getXYName();}
 
 XY Gui::getSize(){return size;}
 
-void Gui::addBigButton(void (Button::*action)(bool leftClick), std::string name){
-    XY size(60, 60);
-
-    buttons.push_back(Button(simulation, world, action, posNextButton, size, name, XY(posNextButton.x + size.x / 10, posNextButton.y + size.y / 3)));
-    posNextButton.x += 60 + buttonsSpace;
-}
-
-void Gui::addSmallButton(void (Button::*action)(bool leftClick), std::string name){
-
+void Gui::addButton(ButtonType buttonType, void (Button::*action)(bool leftClick), std::string name){
+    XY sizeButton;
+    XY positionText;
+    switch (buttonType){
+        case big:
+            sizeButton = {sizeBigButton, sizeBigButton};
+            positionText = {posNextButton.x + sizeButton.x / 10, posNextButton.y + sizeButton.y / 3};
+        break;
+        case small:
+            const int sizeSmallButton = (sizeBigButton) / 2;
+            sizeButton = {sizeSmallButton, sizeSmallButton};
+            positionText = {posNextButton.x + sizeButton.x, posNextButton.y};
+        break;
+    }
+    buttons.push_back(Button(simulation, world, action, posNextButton, sizeButton, name, positionText));
+    switch (buttonType){
+        case big:
+            posNextButton.x += sizeButton.x + buttonsSpace;
+            smallButtonNubmer = 0;
+        break;
+        case small:
+            if (smallButtonNubmer == 1){
+                smallButtonNubmer = 0;
+                posNextButton.x += widthOneSymbol * std::max(name.size(), prevName.size());
+                posNextButton.y -= sizeButton.y + buttonsSpace;
+            }
+            else{
+                smallButtonNubmer++;
+                posNextButton.y += sizeButton.y + buttonsSpace;
+            }
+        break;
+    }
+    prevName = name;
 }
 
 void Gui::updateSize(){
