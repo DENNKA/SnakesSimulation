@@ -12,7 +12,7 @@ namespace render{
         settings.minorVersion = 0;*/
         window.create(sf::VideoMode(800, 600), "Snakes simulation", sf::Style::Default/*, settings*/);
         glOrtho(0.0, window.getSize().x, window.getSize().y, 0.0, 1.0, -1.0);
-        setSizes(sizeSquare,sizeSpace);
+        setSizes(sizeSquare, sizeSpace);
         glEnable(GL_BLEND);  //enable alpha (rgba)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         if (!font.loadFromFile("fonts/LiberationSans-Regular.ttf")){
@@ -48,11 +48,11 @@ namespace render{
             for (int j = 0; j < world.getSize().x; j++){
                 switch (world.getChar(XY(j,i))){
                     case none: continue;
-                    case snake: glColor3f(0, 0.9, 0); break;
-                    case wall: glColor3f(0.9, 0, 0); break;
-                    case food: glColor3f(0.7, 0.7, 0.7); break;
-                    case dead: glColor3f(0.94, 0.94, 0.4); break;
-                    case egg: glColor3f(0.5, 0.4, 0.2); break;
+                    case snake: glColor3ubv(colorSnake.colors); break;
+                    case wall: glColor3ubv(colorWall.colors); break;
+                    case food: glColor4ubv(colorFood.colors); break;
+                    case dead: glColor3ubv(colorDead.colors); break;
+                    case egg: glColor3ubv(colorEgg.colors); break;
                 }
                 glVertex2f(j * (sizeSquare + sizeSpace) + shiftX, i * (sizeSquare + sizeSpace) + shiftY);
                 glVertex2f(j * (sizeSquare + sizeSpace) + shiftX + sizeSquare, i * (sizeSquare + sizeSpace) + shiftY);
@@ -65,7 +65,7 @@ namespace render{
 
     void Render::renderGui(){
         glBegin(GL_QUADS);
-        glColor3f(0.16, 0.19, 0.20);
+        glColor4ubv(colorButton.colors);
         for (int i = 0; i < (int)gui.getButtonsAmount(); i++){
             const XY& xy = gui.getXYButton(i);
             const XY& size = gui.getSizeButton(i);
@@ -84,7 +84,7 @@ namespace render{
     void Render::renderCursorXYSquare(XY cursorSquare){
         if (!world.boundsCheck(cursorSquare)) return;
         glBegin(GL_QUADS);
-        glColor4f(1, 1, 1, 0.5);    //TODO: need normal way to definition color
+        glColor4ubv(colorCursor.colors);
         glVertex2f(cursorSquare.x * (sizeSquare + sizeSpace) + shiftX, cursorSquare.y * (sizeSquare + sizeSpace) + shiftY);
         glVertex2f(cursorSquare.x * (sizeSquare + sizeSpace) + shiftX + sizeSquare, cursorSquare.y * (sizeSquare + sizeSpace) + shiftY);
         glVertex2f(cursorSquare.x * (sizeSquare + sizeSpace) + shiftX + sizeSquare, cursorSquare.y * (sizeSquare + sizeSpace) + shiftY + sizeSquare);
