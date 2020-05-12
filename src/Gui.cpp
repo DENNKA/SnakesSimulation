@@ -35,6 +35,7 @@ XY Gui::getSize(){return size;}
 void Gui::addButton(ButtonType buttonType, void (Button::*action)(bool leftClick), std::string name){
     XY sizeButton;
     XY positionText;
+    //setting up size and position
     switch (buttonType){
         case big:
             sizeButton = {sizeBigButton, sizeBigButton};
@@ -47,6 +48,7 @@ void Gui::addButton(ButtonType buttonType, void (Button::*action)(bool leftClick
         break;
     }
     buttons.push_back(Button(simulation, world, action, posNextButton, sizeButton, name, positionText));
+    //setup position next button
     switch (buttonType){
         case big:
             posNextButton.x += sizeButton.x + buttonsSpace;

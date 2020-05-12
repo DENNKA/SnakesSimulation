@@ -13,7 +13,7 @@ namespace render{
         window.create(sf::VideoMode(800, 600), "Snakes simulation", sf::Style::Default/*, settings*/);
         glOrtho(0.0, window.getSize().x, window.getSize().y, 0.0, 1.0, -1.0);
         setSizes(sizeSquare,sizeSpace);
-        glEnable(GL_BLEND);
+        glEnable(GL_BLEND);  //enable alpha (rgba)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         if (!font.loadFromFile("fonts/LiberationSans-Regular.ttf")){
             std::cout<<"Font not exist";
