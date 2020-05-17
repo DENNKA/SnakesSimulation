@@ -90,6 +90,10 @@ void World::flash(){
 }
 
 void World::setChar(XY& xy, unsigned char symbol){
+    unsigned char c = getChar(xy);
+    if (c == wall){
+
+    }
     FILLRESETPTR(world.at(xy.y).at(xy.x), symbol);
 }
 
