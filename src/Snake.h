@@ -15,20 +15,14 @@ enum Sex{
     male
 };
 
-struct Genes{
-    int upSaturationWhenTailDecrease = 7;
-    int downSaturationWhenTailIncrease = 7;
-    int saturationUpTail = 15;
-    int saturationDownTail = 6;
-    int saturationStart = 10;
-    int startSize = 3;
-    int tailReproduction = 12;
-    int tailDie = 3;
-    int tailDecreaseWhenReproduction = 5;
-    int movesForDecreaseSaturation = 5;
-    int movesInEgg = 50;
+struct Gene{
+    Gene(){};
+    Gene(bool first, bool second){isDominant[0] = first; isDominant[1] = second;}
+    bool isDominant[2];
+};
 
-    int viewCells = 0;
+struct Genes{
+    std::vector<Gene> vectorGenes;
     std::vector<std::vector<std::vector<int>>> weights;
 };
 
@@ -44,8 +38,7 @@ class World;
 
 class Snake{
     public:
-        Snake(World& world, XY xy, int snakeSize, int saturation, int generation, Sex sex, Genes& genes);
-        Snake(bool isEgg, World& world, XY xy, int snakeSize, int saturation, int generation, Sex sex, Genes& genes);
+        Snake(bool isEgg, World& world, XY xy, int generation, Sex sex, Genes& genesFromParent, bool firstSnake = false);
         void loadGenesFromFile(std::string file);
         void unloadGenesIntoFile(std::string file);
         void update();
@@ -56,6 +49,7 @@ class Snake{
         bool getLive();
 
     private:
+        void resizeWeights();
         XY getWeightXY(Dir dir, int x, int y);
         void die(bool deleteHeadOnWorld);
         void reproduction();
@@ -71,6 +65,20 @@ class Snake{
         bool readyForReproduction = false;
         int mutationWeightCount = 1;    //if mutationWeightCount == -5 mutation chance 20%; if == 5 mutation will be 5 times
         int mutationWeightNumber = 3;
+
+        int upSaturationWhenTailDecrease;
+        int downSaturationWhenTailIncrease;
+        int saturationUpTail;
+        int saturationDownTail;
+        int saturationStart;
+        int startSize;
+        int tailReproduction;
+        int tailDie;
+        int tailDecreaseWhenReproduction;
+        int movesForDecreaseSaturation;
+        int movesInEgg;
+        int viewCells;
+
         Sex sex;
         Genes genes;
 };
