@@ -15,15 +15,10 @@ World::World(int worldSizeX, int worldSizeY){
     #endif // DEBUG
     srand(time(NULL));
 
-    int saturation = 10;
     int generation = 0;
     Sex sex = female;
     Genes genes;
-    snakes.push_front(Snake(*this, XY(5,5), 5, saturation, generation, sex, genes));
-
-    snakes.front().loadGenesFromFile("defaultGenes.txt");
-
-    snakes.front().unloadGenesIntoFile("check.txt");
+    snakes.push_front(Snake(false, *this, XY(5,5), generation, sex, genes, true));
 }
 
 void World::setSize(int worldSizeX, int worldSizeY){
@@ -95,6 +90,10 @@ void World::flash(){
 }
 
 void World::setChar(XY& xy, unsigned char symbol){
+    unsigned char c = getChar(xy);
+    if (c == wall){
+
+    }
     FILLRESETPTR(world.at(xy.y).at(xy.x), symbol);
 }
 
@@ -132,8 +131,8 @@ int World::boundsCheck(XY xy){
     else return 0;
 }
 
-void World::addEgg(XY xy, int snakeSize, int saturation, int generation, Genes genes){
-    snakes.push_front(Snake(true, *this, xy, snakeSize, saturation, generation, (Sex)(rand() % 2), genes));
+void World::addEgg(XY xy, int generation, Genes genes){
+    snakes.push_front(Snake(true, *this, xy, generation, (Sex)(rand() % 2), genes));
 }
 
 void World::changeFoodPerTick(int up){
