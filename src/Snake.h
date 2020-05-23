@@ -48,6 +48,7 @@ class Snake{
         int getWeight(Dir dir, int x, int y);
         void setWeight(std::shared_ptr<Genes> genes, Dir dir, int x, int y, int value);
         bool getLive();
+        Sex getSex();
 
     private:
         void resizeWeights();

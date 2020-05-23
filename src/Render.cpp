@@ -23,7 +23,7 @@ namespace render{
 
     void Render::initButtonsName(){
         buttonsText.reserve(gui.getButtonsAmount());
-        for (int i = 0; i < gui.getButtonsAmount(); i++){
+        for (int i = 0; i < (int)gui.getButtonsAmount(); i++){
             sf::Text text;
             text.setFont(font);
             text.setString(gui.getNameButton(i));

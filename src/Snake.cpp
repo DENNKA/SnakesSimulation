@@ -131,7 +131,7 @@ Snake::Snake(bool isEgg, World& world, XY xy, int generation, Sex sex, std::shar
     #undef IFNOTDOMINANT
     #undef BEGIN
     #undef END
-    for (;i < genes->vectorGenes.size(); i++){   //if vector bigger
+    for (;i < (int)genes->vectorGenes.size(); i++){   //if vector bigger
         genes->vectorGenes[i].isDominant[0] = true;
         genes->vectorGenes[i].isDominant[1] = true;
     }
@@ -332,6 +332,8 @@ void Snake::setWeight(std::shared_ptr<Genes> genes, Dir dir, int x, int y, int v
 }
 
 bool Snake::getLive(){return live;}
+
+Sex Snake::getSex(){return sex;}
 
 void Snake::resizeWeights(){
     genes->weights.resize(8);

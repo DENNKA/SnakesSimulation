@@ -22,9 +22,9 @@ class Button{
         Simulation& simulation;
         World& world;
         void (Button::*action)(bool leftClick);
-        std::string name;
         XY xy;
         XY size;
+        std::string name;
         XY xyName;
         bool visible;
         bool invert = false;

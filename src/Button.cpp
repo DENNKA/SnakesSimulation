@@ -18,16 +18,16 @@ std::string Button::getName(){return name;}
 
 XY Button::getXYName(){return xyName;}
 
-void Button::invertSimulation(bool leftClick){
+void Button::invertSimulation([[maybe_unused]] bool leftClick){
     simulation.invertSimulation();
 }
 
-void Button::upFoodPerTick(bool leftClick){
+void Button::upFoodPerTick([[maybe_unused]] bool leftClick){
     if (leftClick) world.changeFoodPerTick(1);
     else world.changeFoodPerTick(20);
 }
 
-void Button::DownFoodPerTick(bool leftClick){
+void Button::DownFoodPerTick([[maybe_unused]] bool leftClick){
     if (leftClick) world.changeFoodPerTick(-1);
     else world.changeFoodPerTick(-20);
 }
