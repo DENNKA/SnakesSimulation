@@ -1,9 +1,8 @@
 #include "Snake.h"
 #include "World.h"
 
-Snake::Snake(bool isEgg, World& world, XY xy, int generation, Sex sex, Genes& genesFromParent, bool firstSnake)
+Snake::Snake(bool isEgg, World& world, XY xy, int generation, Sex sex, std::shared_ptr<Genes> genesFromParent, bool firstSnake)
     : isEgg(isEgg), world(world), generation(generation), sex(sex), genes(genesFromParent){
-
     upSaturationWhenTailDecrease = 0;
     downSaturationWhenTailIncrease = 13;
     saturationUpTail = 0;
@@ -22,14 +21,14 @@ Snake::Snake(bool isEgg, World& world, XY xy, int generation, Sex sex, Genes& ge
         unloadGenesIntoFile("check.txt");
     }
 
-    /*for (auto &it : genes.vectorGenes){
+    /*for (auto &it : genes->vectorGenes){
         d(it.isDominant[0]); d(it.isDominant[1]);
     }*/
 
-    #define START int i = 0; int vectorSize = genes.vectorGenes.size();
+    #define START int i = 0; int vectorSize = genes->vectorGenes.size();
     #define NEXT i++;
-    #define IFDOMINANT if (i < vectorSize && (genes.vectorGenes[i].isDominant[0] || genes.vectorGenes[i].isDominant[1]))    // CAUTION!!! if without {}
-    #define IFNOTDOMINANT if (i < vectorSize && !genes.vectorGenes[i].isDominant[0] && !genes.vectorGenes[i].isDominant[1])
+    #define IFDOMINANT if (i < vectorSize && (genes->vectorGenes[i].isDominant[0] || genes->vectorGenes[i].isDominant[1]))    // CAUTION!!! if without {}
+    #define IFNOTDOMINANT if (i < vectorSize && !genes->vectorGenes[i].isDominant[0] && !genes->vectorGenes[i].isDominant[1])
     #define BEGIN {
     #define END }
     START
@@ -132,9 +131,9 @@ Snake::Snake(bool isEgg, World& world, XY xy, int generation, Sex sex, Genes& ge
     #undef IFNOTDOMINANT
     #undef BEGIN
     #undef END
-    for (;i < genes.vectorGenes.size(); i++){   //if vector bigger
-        genes.vectorGenes[i].isDominant[0] = true;
-        genes.vectorGenes[i].isDominant[1] = true;
+    for (;i < genes->vectorGenes.size(); i++){   //if vector bigger
+        genes->vectorGenes[i].isDominant[0] = true;
+        genes->vectorGenes[i].isDominant[1] = true;
     }
 
     saturation = saturationStart;
@@ -172,18 +171,18 @@ void Snake::loadGenesFromFile(std::string file){
 
     int vectorGenesSize;
     fin >> vectorGenesSize;
-    genes.vectorGenes.reserve(vectorGenesSize);
+    genes->vectorGenes.reserve(vectorGenesSize);
     for (int i = 0; i < vectorGenesSize; i++){
         int temp0, temp1;
         fin >> temp0;
         fin >> temp1;
-        genes.vectorGenes.push_back(Gene(temp0, temp1));
+        genes->vectorGenes.push_back(Gene(temp0, temp1));
     }
 
     fin >> viewCells;
     resizeWeights();
 
-    for (auto &it1 : genes.weights){
+    for (auto &it1 : genes->weights){
         for (auto &it2 : it1){
             for (auto &it3 : it2){
                 fin >> it3;
@@ -203,7 +202,7 @@ void Snake::unloadGenesIntoFile(std::string file){
     }
 
     fout << viewCells << std::endl;
-    for (auto &it1 : genes.weights){
+    for (auto &it1 : genes->weights){
         for (auto &it2 : it1){
             for (auto &it3 : it2){
                 fout << it3 << ' ';
@@ -324,20 +323,20 @@ void Snake::removeOneTail(){
 
 int Snake::getWeight(Dir dir, int x, int y){
     XY xy = getWeightXY(dir, x, y);
-    return genes.weights[dir][xy.y][xy.x];
+    return genes->weights[dir][xy.y][xy.x];
 }
 
-void Snake::setWeight(Genes& genes, Dir dir, int x, int y, int value){
+void Snake::setWeight(std::shared_ptr<Genes> genes, Dir dir, int x, int y, int value){
     XY xy = getWeightXY(dir, x, y);
-    genes.weights[dir][xy.y][xy.x] = value;
+    genes->weights[dir][xy.y][xy.x] = value;
 }
 
 bool Snake::getLive(){return live;}
 
 void Snake::resizeWeights(){
-    genes.weights.resize(8);
+    genes->weights.resize(8);
     int i = 0;
-    for (auto &it1 : genes.weights){
+    for (auto &it1 : genes->weights){
         if (i % 2 == 1) {
             it1.resize(viewCells + 1);
             for (auto &it2 : it1){
@@ -400,8 +399,8 @@ void Snake::reproduction(){
     }
 }
 
-Genes Snake::makeMutation(){
-    Genes newGenes = genes;
+std::shared_ptr<Genes> Snake::makeMutation(){
+    std::shared_ptr<Genes> newGenes(new Genes(*genes.get()));   //create new genes and copy from old genes
     if (mutationWeightCount < 0) mutationWeightCount = ((rand() % mutationWeightCount) == 0);
     for (int i = 0; i < mutationWeightCount; i++){
         Dir dir = (Dir)(rand() % dirEnd);

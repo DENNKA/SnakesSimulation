@@ -5,6 +5,7 @@
 #include <list>
 #include <string>
 #include <fstream>
+#include <memory>   //shared_ptr
 
 #include "XY.h"
 
@@ -38,14 +39,14 @@ class World;
 
 class Snake{
     public:
-        Snake(bool isEgg, World& world, XY xy, int generation, Sex sex, Genes& genesFromParent, bool firstSnake = false);
+        Snake(bool isEgg, World& world, XY xy, int generation, Sex sex, std::shared_ptr<Genes> genesFromParent, bool firstSnake = false);
         void loadGenesFromFile(std::string file);
         void unloadGenesIntoFile(std::string file);
         void update();
         void addOneTail();
         void removeOneTail();
         int getWeight(Dir dir, int x, int y);
-        void setWeight(Genes& genes, Dir dir, int x, int y, int value);
+        void setWeight(std::shared_ptr<Genes> genes, Dir dir, int x, int y, int value);
         bool getLive();
 
     private:
@@ -53,7 +54,7 @@ class Snake{
         XY getWeightXY(Dir dir, int x, int y);
         void die(bool deleteHeadOnWorld);
         void reproduction();
-        Genes makeMutation();
+        std::shared_ptr<Genes> makeMutation();
         bool isEgg = false;
         World& world;
         std::list<XY> xySnake;  //coordinates of head [0] and tail [1-...]
@@ -80,7 +81,7 @@ class Snake{
         int viewCells;
 
         Sex sex;
-        Genes genes;
+        std::shared_ptr<Genes> genes;
 };
 
 #endif // SHAKE_H_INCLUDED

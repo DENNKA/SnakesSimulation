@@ -17,7 +17,8 @@ World::World(int worldSizeX, int worldSizeY){
 
     int generation = 0;
     Sex sex = female;
-    Genes genes;
+    std::shared_ptr<Genes> genes(new Genes);
+
     snakes.push_front(Snake(false, *this, XY(5,5), generation, sex, genes, true));
 }
 
@@ -90,10 +91,6 @@ void World::flash(){
 }
 
 void World::setChar(XY& xy, unsigned char symbol){
-    unsigned char c = getChar(xy);
-    if (c == wall){
-
-    }
     FILLRESETPTR(world.at(xy.y).at(xy.x), symbol);
 }
 
@@ -131,7 +128,7 @@ int World::boundsCheck(XY xy){
     else return 0;
 }
 
-void World::addEgg(XY xy, int generation, Genes genes){
+void World::addEgg(XY xy, int generation, std::shared_ptr<Genes> genes){
     snakes.push_front(Snake(true, *this, xy, generation, (Sex)(rand() % 2), genes));
 }
 
