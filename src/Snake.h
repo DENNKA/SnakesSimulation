@@ -45,29 +45,35 @@ class Snake{
         void update();
         void addOneTail();
         void removeOneTail();
-        int getWeight(Dir dir, int x, int y);
+        int getWeight(std::shared_ptr<Genes> genes, Dir dir, int x, int y);
         void setWeight(std::shared_ptr<Genes> genes, Dir dir, int x, int y, int value);
         bool getLive();
         Sex getSex();
 
     private:
+        void setGenesPartner(std::shared_ptr<Genes> genesPartner);
+        int makeShorten(int size);  //return 1 if ok
         void resizeWeights();
         XY getWeightXY(Dir dir, int x, int y);
         void die(bool deleteHeadOnWorld);
         void reproduction();
-        std::shared_ptr<Genes> makeMutation();
+        std::shared_ptr<Genes> makeNewGenes();
         bool isEgg = false;
         World& world;
         std::list<XY> xySnake;  //coordinates of head [0] and tail [1-...]
         int eggTicks = 0;
+        int reproductionTicks = 0;
+        int eggsWithOnePartnerCounter = 0;
         bool live = true;
         int saturation;
         int saturationTimer = 0;
         int generation;
         bool readyForReproduction = false;
-        int mutationWeightCount = 1;    //if mutationWeightCount == -5 mutation chance 20%; if == 5 mutation will be 5 times
-        int mutationWeightNumber = 3;
 
+        int mutationWeightCount = 1;    //if mutationWeightCount == -5 mutation chance 20%; if == 5 mutation will be 5 times
+        int mutationGenesCount = -4;    //see above
+        int mutationWeightNumber = 3;
+        int laidEggsWithOnePartner = 3;
         int upSaturationWhenTailDecrease;
         int downSaturationWhenTailIncrease;
         int saturationUpTail;
@@ -82,6 +88,7 @@ class Snake{
         int viewCells;
 
         Sex sex;
+        std::shared_ptr<Genes> genesPartner;
         std::shared_ptr<Genes> genes;
 };
 

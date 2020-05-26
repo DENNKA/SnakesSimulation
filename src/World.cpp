@@ -16,10 +16,15 @@ World::World(int worldSizeX, int worldSizeY){
     srand(time(NULL));
 
     int generation = 0;
-    Sex sex = female;
+    XY xy(worldSizeX / 2, worldSizeY / 2);
     std::shared_ptr<Genes> genes(new Genes);
-
-    snakes.push_front(Snake(false, *this, XY(5,5), generation, sex, genes, true));
+    snakes.push_front(Snake(false, *this, xy, generation, female, genes, true));
+    genes = std::make_shared<Genes>();
+    snakes.push_front(Snake(false, *this, xy, generation, male, genes, true));
+    genes = std::make_shared<Genes>();
+    snakes.push_front(Snake(false, *this, xy, generation, female, genes, true));
+    genes = std::make_shared<Genes>();
+    snakes.push_front(Snake(false, *this, xy, generation, male, genes, true));
 }
 
 void World::setSize(int worldSizeX, int worldSizeY){

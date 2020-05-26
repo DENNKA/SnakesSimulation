@@ -1,6 +1,8 @@
 #include "Snake.h"
 #include "World.h"
 
+#define head xySnake.front()
+
 Snake::Snake(bool isEgg, World& world, XY xy, int generation, Sex sex, std::shared_ptr<Genes> genesFromParent, bool firstSnake)
     : isEgg(isEgg), world(world), generation(generation), sex(sex), genes(genesFromParent){
     upSaturationWhenTailDecrease = 0;
@@ -234,12 +236,12 @@ void Snake::update(){
                     case snake:
                     case wall:
                         for (int dir = 0, dirWeight = wallUp; dirWeight <= wallLeft; dirWeight++, dir++){
-                            dirs[dir] -= getWeight((Dir)dirWeight, j, i);
+                            dirs[dir] -= getWeight(genes, (Dir)dirWeight, j, i);
                         }
                     break;
                     case food:
                         for (int dir = 0, dirWeight = foodUp; dirWeight <= foodLeft; dirWeight++, dir++){
-                            dirs[dir] += getWeight((Dir)dirWeight, j, i);
+                            dirs[dir] += getWeight(genes, (Dir)dirWeight, j, i);
                         }
                     break;
                 }
@@ -321,7 +323,7 @@ void Snake::removeOneTail(){
     xySnake.erase(--xySnake.end());
 }
 
-int Snake::getWeight(Dir dir, int x, int y){
+int Snake::getWeight(std::shared_ptr<Genes> genes, Dir dir, int x, int y){
     XY xy = getWeightXY(dir, x, y);
     return genes->weights[dir][xy.y][xy.x];
 }
@@ -334,6 +336,24 @@ void Snake::setWeight(std::shared_ptr<Genes> genes, Dir dir, int x, int y, int v
 bool Snake::getLive(){return live;}
 
 Sex Snake::getSex(){return sex;}
+
+void Snake::setGenesPartner(std::shared_ptr<Genes> genesPartner){this->genesPartner = genesPartner;}
+
+int Snake::makeShorten(int size){
+    if ((int)xySnake.size() - size <= tailDie){
+        die(true);
+        return 0;
+    }
+    else{
+        auto it = xySnake.end();
+        for (int i = 0; i < size; i++){
+            --it;
+            world.setChar(*it, none);
+        }
+        xySnake.resize(xySnake.size() - size);
+        return 1;
+    }
+}
 
 void Snake::resizeWeights(){
     genes->weights.resize(8);
@@ -383,34 +403,71 @@ void Snake::die(bool deleteHeadOnWorld){
 void Snake::reproduction(){
     readyForReproduction = true;
     if (sex == male){
-
+        const int view = viewCells * 2 + 1;
+        if (reproductionTicks++ == viewCells){  //skip for optimization   ! reproductionTicks++
+            reproductionTicks = 0;
+            for (int y = head.y - viewCells, i = 0; i < view; y++, i++){  //search partner
+                for (int x = head.x - viewCells, j = 0; j < view; x++, j++){
+                    auto snake = world.getSnake(XY(x, y));
+                    if (snake && snake != this && snake->getSex() == female){
+                        if (makeShorten(tailDecreaseWhenReproduction)){
+                            snake->setGenesPartner(genes);
+                            return;  // !
+                        }
+                    }
+                }
+            }
+        }
     }
     else{
-        if ((int)xySnake.size() - tailDecreaseWhenReproduction <= tailDie){
-            die(true);
-        }
-        else{
-            auto it = xySnake.end();
-            for (int i = 0; i < tailDecreaseWhenReproduction; i++){
-                --it;
-                world.setChar(*it, none);
+        if (genesPartner){
+            if (eggsWithOnePartnerCounter++ == laidEggsWithOnePartner){  // ! eggsWithOnePartnerCounter++
+                eggsWithOnePartnerCounter = 0;
+                genesPartner = nullptr;
             }
-            xySnake.resize(xySnake.size() - tailDecreaseWhenReproduction);
+            else{
+                if (makeShorten(tailDecreaseWhenReproduction)){
+                    world.addEgg(xySnake.back(), generation + 1, makeNewGenes());
+                }
+            }
         }
-        world.addEgg(xySnake.back(), generation + 1, makeMutation());
     }
 }
 
-std::shared_ptr<Genes> Snake::makeMutation(){
-    std::shared_ptr<Genes> newGenes(new Genes(*genes.get()));   //create new genes and copy from old genes
-    if (mutationWeightCount < 0) mutationWeightCount = ((rand() % mutationWeightCount) == 0);
-    for (int i = 0; i < mutationWeightCount; i++){
+std::shared_ptr<Genes> Snake::makeNewGenes(){
+    std::shared_ptr<Genes> newGenes(new Genes(*genes.get()));
+    const int view = viewCells * 2 + 1;
+    for (int i = 0; i < view; i++){
+        for (int j = 0; j < view; j++){
+            for (int dir = 0; dir < dirEnd; dir++){
+                setWeight(newGenes, Dir(dir), j, i, (getWeight(newGenes, (Dir)dir, j, i) + getWeight(genesPartner, (Dir)dir, j, i)) / 2);
+            }
+        }
+    }
+    int iFemale = rand() % 2;
+    int iMale = rand() % 2;
+    for (int i = 0; i < (int)newGenes->vectorGenes.size(); i++){
+        newGenes->vectorGenes[i].isDominant[0] = genes->vectorGenes[i].isDominant[iFemale];
+        newGenes->vectorGenes[i].isDominant[1] = genesPartner->vectorGenes[i].isDominant[iMale];
+    }
+
+    //mutation
+    int mutationN = mutationWeightCount;
+    if (mutationWeightCount < 0) mutationN = ((rand() % -mutationWeightCount) == 0);
+    for (int i = 0; i < mutationN; i++){
         Dir dir = (Dir)(rand() % dirEnd);
         const int view = viewCells * 2 + 1;
         int x = rand() % view;
         int y = rand() % view;
         int value = rand() % mutationWeightNumber - mutationWeightNumber / 2;
-        setWeight(newGenes, dir, x, y, getWeight(dir, x, y) + value);
+        setWeight(newGenes, dir, x, y, getWeight(genes, dir, x, y) + value);
+    }
+    mutationN = mutationGenesCount;
+    if (mutationGenesCount < 0) mutationN = ((rand() % -mutationGenesCount) == 0);
+    for (int i = 0; i < mutationN; i++){
+        auto geneI = rand() % newGenes->vectorGenes.size();
+        auto isDominantI = rand() % 2;
+        newGenes->vectorGenes[geneI].isDominant[isDominantI] = !newGenes->vectorGenes[geneI].isDominant[isDominantI];
     }
     return newGenes;
 }
