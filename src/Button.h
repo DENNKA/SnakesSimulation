@@ -1,32 +1,22 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
+#include "GuiComponent.h"
 #include "XY.h"
 #include "World.h"
 
 class Simulation;
 
-class Button{
+class Button : public GuiComponent{
     public:
         Button(Simulation& simulation, World& world, void (Button::*action)(bool leftClick), XY xy, XY size, std::string name, XY xyName);
         void click(bool leftClick);
-        XY getXY();
-        XY getSize();
-        std::string getName();
-        XY getXYName();
 
         void invertSimulation(bool leftClick);
         void upFoodPerTick(bool leftClick);
         void DownFoodPerTick(bool leftClick);
     private:
-        Simulation& simulation;
-        World& world;
         void (Button::*action)(bool leftClick);
-        XY xy;
-        XY size;
-        std::string name;
-        XY xyName;
-        bool visible;
         bool invert = false;
 };
 
