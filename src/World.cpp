@@ -141,6 +141,8 @@ void World::changeFoodPerTick(int up){
     foodPerTick += up;
 }
 
+int World::getFoodPerTick(){return foodPerTick;}
+
 std::vector<std::string> World::test(){
     #ifdef __linux__
     #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)

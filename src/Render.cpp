@@ -22,14 +22,32 @@ namespace render{
     }
 
     void Render::initButtonsName(){
-        buttonsText.reserve(gui.getButtonsAmount());
-        for (int i = 0; i < (int)gui.getButtonsAmount(); i++){
+        auto buttons = gui.getButtons();
+        buttonsText.reserve(buttons.size());
+        for (auto& it : buttons){
             sf::Text text;
             text.setFont(font);
-            text.setString(gui.getNameButton(i));
-            text.setPosition(gui.getXYNameButton(i).x, gui.getXYNameButton(i).y);
-            text.setCharacterSize(characterSize);
+            text.setString(it.getName());
+            text.setPosition(it.getXYName().x, it.getXYName().y);
+            text.setCharacterSize(it.getFontSize());
             buttonsText.push_back(text);
+        }
+        initTexts();
+    }
+
+    void Render::initTexts(){
+        auto& texts = gui.getTexts();
+        this->texts.reserve(texts.size());
+        int i = 0;
+        for (auto& it : texts){
+            sf::Text text;
+            text.setFont(font);
+            text.setString(it.getText());
+            text.setPosition(it.getXY().x, it.getXY().y);
+            text.setCharacterSize(it.getFontSize());
+            this->texts.push_back(text);
+            it.setIdentifier(i);
+            i++;
         }
     }
 
@@ -66,9 +84,10 @@ namespace render{
     void Render::renderGui(){
         glBegin(GL_QUADS);
         glColor4ubv(colorButton.colors);
-        for (int i = 0; i < (int)gui.getButtonsAmount(); i++){
-            const XY& xy = gui.getXYButton(i);
-            const XY& size = gui.getSizeButton(i);
+        auto buttons = gui.getButtons();
+        for (auto& it : buttons){
+            const XY& xy = it.getXY();
+            const XY& size = it.getSize();
             glVertex2i(xy.x, xy.y);   //top left
             glVertex2i(xy.x + size.x, xy.y);   //top right
             glVertex2i(xy.x + size.x, xy.y + size.y);   //bottom right
@@ -96,11 +115,20 @@ namespace render{
         for (auto& it : buttonsText){
             window.draw(it);
         }
+        for (auto& it : texts){
+            window.draw(it);
+        }
     }
 
     void Render::updateSizeWindow(){
         glViewport(0, 0, window.getSize().x, window.getSize().y);
-        //glOrtho(0.0, window.getSize().x, window.getSize().y, 0.0,1.0,-1.0);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glOrtho(0, window.getSize().x, window.getSize().y, 0, -1, 1);
+    }
+
+    void Render::updateOneText(int i, const std::string& string){
+        texts[i].setString(string);
     }
 
     void Render::setSizes(int sizeSquare, int sizeSpace){

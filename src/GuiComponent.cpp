@@ -1,12 +1,15 @@
 #include "GuiComponent.h"
+#include "Render.h"
 
-GuiComponent::GuiComponent(Simulation& simulation, World& world, XY xy, XY size, std::string name, XY xyName) : simulation(simulation), world(world), xy(xy), size(size), name(name), xyName(xyName){
+GuiComponent::GuiComponent(Simulation& simulation, World& world, render::Render& render, XY xy, XY size, std::string name, XY xyName, int fontSize) : simulation(simulation), world(world), render(render), xy(xy), size(size), name(name), xyName(xyName), fontSize(fontSize){
 
 }
 
 XY GuiComponent::getXY(){return xy;}
 
 XY GuiComponent::getSize(){return size;}
+
+int GuiComponent::getFontSize(){return fontSize;}
 
 std::string GuiComponent::getName(){return name;}
 

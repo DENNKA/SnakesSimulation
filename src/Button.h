@@ -4,19 +4,21 @@
 #include "GuiComponent.h"
 #include "XY.h"
 #include "World.h"
+#include "Text.h"
 
 class Simulation;
 
 class Button : public GuiComponent{
     public:
-        Button(Simulation& simulation, World& world, void (Button::*action)(bool leftClick), XY xy, XY size, std::string name, XY xyName);
+        Button(Simulation& simulation, World& world, render::Render& render, void (Button::*action)(bool leftClick), XY xy, XY size, std::string name, XY xyName, int fontSize, Text* text = nullptr);
         void click(bool leftClick);
 
         void invertSimulation(bool leftClick);
         void upFoodPerTick(bool leftClick);
-        void DownFoodPerTick(bool leftClick);
+        void downFoodPerTick(bool leftClick);
     private:
         void (Button::*action)(bool leftClick);
+        Text* text;
         bool invert = false;
 };
 

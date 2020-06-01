@@ -1,12 +1,23 @@
 #include "Gui.h"
 #include "Simulation.h"
+#include "Render.h"
 
-Gui::Gui(Simulation& simulation, World& world) : simulation(simulation), world(world){
-    posNextButton.x = 0;
-    posNextButton.y = simulation.getWindowSize().y - 60;
+Gui::Gui(Simulation& simulation, World& world, render::Render& render) : simulation(simulation), world(world), render(render){
+    xyGui.x = 0;
+    xyGui.y = simulation.getWindowSize().y - 60;
+    nextPos = xyGui;
+
+    #define addTextAndTwoButtons(function, text) \
+        addText(&Text::watch##function, text); \
+        addButton(small, &Button::up##function, "+" + std::string(text),  &texts.back()); \
+        addButton(small, &Button::down##function, "-" + std::string(text),  &texts.back());
+
+    // init buttons
     addButton(big, &Button::invertSimulation, "Start");
-    addButton(small, &Button::upFoodPerTick, "+food");
-    addButton(small, &Button::DownFoodPerTick, "-food");
+    addTextAndTwoButtons(FoodPerTick, "food");
+
+    #undef addTextAndTwoButtons
+
     //updateSize();
 }
 
@@ -20,49 +31,55 @@ void Gui::click(XY cursor, bool leftClick){
     }
 }
 
-unsigned Gui::getButtonsAmount(){return buttons.size();}
+std::list<Text>& Gui::getTexts(){return texts;}
 
-XY Gui::getXYButton(unsigned int i){return buttons[i].getXY();}
-
-XY Gui::getSizeButton(unsigned int i){return buttons[i].getSize();}
-
-std::string Gui::getNameButton(unsigned int i){return buttons[i].getName();}
-
-XY Gui::getXYNameButton(unsigned int i){return buttons[i].getXYName();}
+std::vector<Button>& Gui::getButtons(){return buttons;}
 
 XY Gui::getSize(){return size;}
 
-void Gui::addButton(ButtonType buttonType, void (Button::*action)(bool leftClick), std::string name){
+void Gui::addText(int (Text::*watch)(), std::string name){
+    XY xy = xyGui;
+    xy.x = nextPos.x + sizeBigButton / 10;
+    xy.y += sizeBigButton / 4;
+    texts.push_back(Text(simulation, world, render, watch, xy, size, name, xy, fontSize));
+    nextPos.x += sizeBigButton;
+}
+
+void Gui::addButton(ButtonType buttonType, void (Button::*action)(bool leftClick), std::string name, Text* text){
     XY sizeButton;
     XY positionText;
     //setting up size and position
     switch (buttonType){
         case big:
+            if (smallButtonNubmer == 1){
+                nextPos.y -= sizeButton.y + buttonsSpace;
+                nextPos.x += widthOneSymbol * prevName.size();
+            }
             sizeButton = {sizeBigButton, sizeBigButton};
-            positionText = {posNextButton.x + sizeButton.x / 10, posNextButton.y + sizeButton.y / 3};
+            positionText = {nextPos.x + sizeButton.x / 10, nextPos.y + sizeButton.y / 3};
         break;
         case small:
             const int sizeSmallButton = (sizeBigButton) / 2;
             sizeButton = {sizeSmallButton, sizeSmallButton};
-            positionText = {posNextButton.x + sizeButton.x, posNextButton.y};
+            positionText = {nextPos.x + sizeButton.x, nextPos.y};
         break;
     }
-    buttons.push_back(Button(simulation, world, action, posNextButton, sizeButton, name, positionText));
+    buttons.push_back(Button(simulation, world, render, action, nextPos, sizeButton, name, positionText, fontSize, text));
     //setup position next button
     switch (buttonType){
         case big:
-            posNextButton.x += sizeButton.x + buttonsSpace;
+            nextPos.x += sizeButton.x + buttonsSpace;
             smallButtonNubmer = 0;
         break;
         case small:
             if (smallButtonNubmer == 1){
                 smallButtonNubmer = 0;
-                posNextButton.x += widthOneSymbol * std::max(name.size(), prevName.size());
-                posNextButton.y -= sizeButton.y + buttonsSpace;
+                nextPos.x += widthOneSymbol * std::max(name.size(), prevName.size());
+                nextPos.y -= sizeButton.y + buttonsSpace;
             }
             else{
                 smallButtonNubmer++;
-                posNextButton.y += sizeButton.y + buttonsSpace;
+                nextPos.y += sizeButton.y + buttonsSpace;
             }
         break;
     }

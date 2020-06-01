@@ -20,6 +20,7 @@ namespace render{
         public:
             Render(sf::RenderWindow& window, World& world, Gui& gui);
             void initButtonsName();
+            void initTexts();   //TODO: one init func
             void render(XY cursorSquare);
             void renderWorld();
             void renderGui();
@@ -27,6 +28,7 @@ namespace render{
             void renderCursorXYSquare(XY cursorSquare);
             void renderTexts();
             void updateSizeWindow();
+            void updateOneText(int i, const std::string& string);
             void setSizes(int sizeSquare, int sizeSpace);
             void shift(int shiftX, int shiftY);
             void shiftDir(Dir dir);
@@ -59,8 +61,9 @@ namespace render{
             Color4ub colorButton = Color4ub(41, 48, 51);
             Color4ub colorCursor = Color4ub(255, 255, 255, 125);
 
+            std::vector<sf::Text> texts;
+
             std::vector<sf::Text> buttonsText;
-            int characterSize = 20;
             sf::Font font;
 
             sf::RenderWindow& window;

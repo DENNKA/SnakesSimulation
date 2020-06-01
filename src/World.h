@@ -44,6 +44,7 @@ class World{
         int boundsCheck(XY xy); //return 1 when in xy in bounds
         void addEgg(XY xy, int generation, std::shared_ptr<Genes> genes);
         void changeFoodPerTick(int up);
+        int getFoodPerTick();
     private:
         std::vector<std::string> test();
         XY size;

@@ -1,6 +1,6 @@
 #include "Simulation.h"
 
-Simulation::Simulation() : world(100, 65), render(window, world, gui), gui(*this, world){
+Simulation::Simulation() : world(100, 65), render(window, world, gui), gui(*this, world, render){
     render.initButtonsName();
 }
 
@@ -27,7 +27,7 @@ void Simulation::start(){
                     focusOnWindow = false;
                 break;
                 case sf::Event::Resized:
-                    //window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+                    window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
                     render.updateSizeWindow();
                 break;
                 case sf::Event::MouseButtonPressed:{
