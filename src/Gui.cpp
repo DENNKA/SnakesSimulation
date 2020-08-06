@@ -6,19 +6,33 @@ Gui::Gui(Simulation& simulation, World& world, render::Render& render) : simulat
     xyGui.x = 0;
     xyGui.y = simulation.getWindowSize().y - 60;
     nextPos = xyGui;
-
-    #define addTextAndTwoButtons(function, text) \
-        addText(&Text::watch##function, text); \
-        addButton(small, &Button::up##function, "+" + std::string(text),  &texts.back()); \
-        addButton(small, &Button::down##function, "-" + std::string(text),  &texts.back());
+    #define lambda(code) [&simulation, &world] ([[maybe_unused]] bool leftClick) mutable{code;}
+    #define lambdaText(code) [&simulation, &world] () mutable{code;}
+    #define addTextAndTwoButtons(text, lambda1, lambda2, lamdaText1) \
+        addText(lamdaText1, text); \
+        addButton(small, lambda1, "+" + std::string(text),  &texts.back()); \
+        addButton(small, lambda2, "-" + std::string(text),  &texts.back());
 
     // init buttons
-    addButton(big, &Button::invertSimulation, "Start");
-    addTextAndTwoButtons(FoodPerTick, "food");
+    addButton(big, lambda(simulation.invertSimulation()), "Start");
+    addTextAndTwoButtons(
+        "food",
+        lambda(if (leftClick) world.changeFoodPerTick(1); else world.changeFoodPerTick(20);),
+        lambda(if (leftClick) world.changeFoodPerTick(-1); else world.changeFoodPerTick(-20);),
+        lambdaText({return world.getFoodPerTick();})
+    );
 
     #undef addTextAndTwoButtons
+    #undef lambda
+    #undef lambdaText
 
     //updateSize();
+}
+
+void Gui::setSnake(Snake* snake){this->snake = snake;}
+
+void Gui::update(){
+
 }
 
 void Gui::click(XY cursor, bool leftClick){
@@ -37,7 +51,7 @@ std::vector<Button>& Gui::getButtons(){return buttons;}
 
 XY Gui::getSize(){return size;}
 
-void Gui::addText(int (Text::*watch)(), std::string name){
+void Gui::addText(const std::function<int(void)> watch, std::string name){
     XY xy = xyGui;
     xy.x = nextPos.x + sizeBigButton / 10;
     xy.y += sizeBigButton / 4;
@@ -45,7 +59,7 @@ void Gui::addText(int (Text::*watch)(), std::string name){
     nextPos.x += sizeBigButton;
 }
 
-void Gui::addButton(ButtonType buttonType, void (Button::*action)(bool leftClick), std::string name, Text* text){
+void Gui::addButton(ButtonType buttonType, const std::function<void(bool)> action, std::string name, Text* text){
     XY sizeButton;
     XY positionText;
     //setting up size and position

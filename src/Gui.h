@@ -19,6 +19,8 @@ enum class guiWindow{
 class Gui{
     public:
         Gui(Simulation& simulation, World& world, render::Render& render);
+        void setSnake(Snake* snake);
+        void update();
         void click(XY cursor, bool leftClick);
         std::list<Text>& getTexts();  //don't use vector because pointers become invalidate
         std::vector<Button>& getButtons();
@@ -28,8 +30,8 @@ class Gui{
             small
         };
     private:
-        void addText(int (Text::*watch)(), std::string name);
-        void addButton(ButtonType buttonType, void (Button::*action)(bool leftClick), std::string name, Text* text = nullptr);
+        void addText(const std::function<int(void)> watch, std::string name);
+        void addButton(ButtonType buttonType, const std::function<void(bool)> action, std::string name, Text* text = nullptr);
         void updateSize();
         int fontSize = 20;
         const int sizeBigButton = 60;
@@ -42,6 +44,9 @@ class Gui{
         XY xyGui;
         std::vector<Button> buttons;
         std::list<Text> texts;
+
+        Snake* snake;
+
         Simulation& simulation;
         World& world;
         render::Render& render;

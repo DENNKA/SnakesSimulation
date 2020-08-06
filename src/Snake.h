@@ -37,9 +37,12 @@ enum Dir{
 
 class World;
 
+class Gui;
+
 class Snake{
     public:
         Snake(bool isEgg, World& world, XY xy, int generation, Sex sex, std::shared_ptr<Genes> genesFromParent, bool firstSnake = false);
+        friend Gui;
         void loadGenesFromFile(std::string file);
         void unloadGenesIntoFile(std::string file);
         void update();
