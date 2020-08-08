@@ -30,7 +30,7 @@ class Gui{
             small
         };
     private:
-        void addText(const std::function<int(void)> watch, std::string name);
+        void addText(const std::function<std::string(void)> watch, std::string name);
         void addButton(ButtonType buttonType, const std::function<void(bool)> action, std::string name, Text* text = nullptr);
         void updateSize();
         int fontSize = 20;

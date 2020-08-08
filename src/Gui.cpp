@@ -19,14 +19,15 @@ Gui::Gui(Simulation& simulation, World& world, render::Render& render) : simulat
         "food",
         lambda(if (leftClick) world.changeFoodPerTick(1); else world.changeFoodPerTick(20);),
         lambda(if (leftClick) world.changeFoodPerTick(-1); else world.changeFoodPerTick(-20);),
-        lambdaText({return world.getFoodPerTick();})
+        lambdaText(return std::to_string(world.getFoodPerTick()))
     );
     addTextAndTwoButtons(
         "delay",
         lambda(if (leftClick) simulation.changeDelay(5); else simulation.changeDelay(10);),
         lambda(if (leftClick) simulation.changeDelay(-5); else simulation.changeDelay(-10);),
-        lambdaText({return simulation.getDelay();})
+        lambdaText(return std::to_string(simulation.getDelay()))
     );
+
     #undef addTextAndTwoButtons
     #undef lambda
     #undef lambdaText
@@ -63,7 +64,7 @@ std::vector<Button>& Gui::getButtons(){return buttons;}
 
 XY Gui::getSize(){return size;}
 
-void Gui::addText(const std::function<int(void)> watch, std::string name){
+void Gui::addText(const std::function<std::string(void)> watch, std::string name){
     XY xy = xyGui;
     xy.x = nextPos.x + sizeBigButton / 10;
     xy.y += sizeBigButton / 4;

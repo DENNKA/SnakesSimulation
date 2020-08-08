@@ -2,7 +2,7 @@
 #include "Render.h"
 
 Text::Text(Simulation& simulation, World& world, render::Render& render,
-           const std::function<int(void)> watch, XY xy, XY size, const std::string& name,
+           const std::function<std::string(void)> watch, XY xy, XY size, const std::string& name,
            XY xyName, int fontSize) :
            GuiComponent(simulation, world, render, xy, size, name, xyName, fontSize),
            watch(watch){
@@ -20,7 +20,7 @@ void Text::updateFromButton(){
 }
 
 std::string Text::getText(){
-    return std::to_string(watch());
+    return watch();
 }
 
 void Text::setIdentifier(int identifier){this->identifier = identifier;}
