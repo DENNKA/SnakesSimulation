@@ -90,7 +90,7 @@ void Simulation::start(){
 
         window.display();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
     }
 }
 
@@ -107,6 +107,13 @@ void Simulation::invertSimulation(){
 }
 
 XY Simulation::getWindowSize(){return window.getSize();}
+
+int Simulation::getDelay(){return delay;};
+
+void Simulation::changeDelay(int delayUp){
+    if (delay + delayUp <= 0) delay = 0;
+    else delay = delay + delayUp;
+}
 
 Simulation::~Simulation(){
 

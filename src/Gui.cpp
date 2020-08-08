@@ -21,7 +21,12 @@ Gui::Gui(Simulation& simulation, World& world, render::Render& render) : simulat
         lambda(if (leftClick) world.changeFoodPerTick(-1); else world.changeFoodPerTick(-20);),
         lambdaText({return world.getFoodPerTick();})
     );
-
+    addTextAndTwoButtons(
+        "delay",
+        lambda(if (leftClick) simulation.changeDelay(5); else simulation.changeDelay(10);),
+        lambda(if (leftClick) simulation.changeDelay(-5); else simulation.changeDelay(-10);),
+        lambdaText({return simulation.getDelay();})
+    );
     #undef addTextAndTwoButtons
     #undef lambda
     #undef lambdaText
@@ -37,8 +42,6 @@ void Gui::update(){
     }
     if (snakePtr && *snakePtr){
         Snake& snake = **snakePtr;
-        d(snake.getLive())
-        ; // при удалении snake отправить в гуй и сохранить
 
     }
 

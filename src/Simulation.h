@@ -17,6 +17,8 @@ class Simulation{
         void invertSimulation();
         XY getWindowSize();
         void shutdown();
+        int getDelay();
+        void changeDelay(int delayUp);
         ~Simulation();
     private:
         bool simulation = false;
@@ -25,6 +27,7 @@ class Simulation{
         render::Render render;
         Gui gui;
         bool focusOnWindow = true;
+        int delay = 20;
 };
 
 #endif // SIMULATION_H_INCLUDED
