@@ -41,6 +41,8 @@ class World{
         unsigned char getCharNoThrow(XY xy);    //if xy don't in bounds return none (0)
         void addSnake();
         Snake* getSnake(XY xy);
+        void setGuiWatch(XY xy);
+        Snake** getGuiSnakePtr();
         int boundsCheck(XY xy); //return 1 when in xy in bounds
         void addEgg(XY xy, int generation, std::shared_ptr<Genes> genes);
         void changeFoodPerTick(int up);
@@ -50,6 +52,8 @@ class World{
         XY size;
         std::vector<std::vector<Tile>> world;
         std::list<Snake> snakes;
+        std::list<Snake> snakesSavedForGui;
+        Snake* guiSnakePtr = nullptr;
         int foodPerTick = 1;
         int foodTicks = 0;
 };

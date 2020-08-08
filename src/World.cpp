@@ -80,6 +80,10 @@ void World::update(){
             (*it).update();
         }
         else{
+            if (&(*it) == guiSnakePtr){
+                snakesSavedForGui.push_back(*it);
+                guiSnakePtr = &snakesSavedForGui.back();
+            }
             it = snakes.erase(it);
         }
     }
@@ -123,8 +127,17 @@ Snake* World::getSnake(XY xy){
     if (boundsCheck(xy)){
         return world[xy.y][xy.x].snake;
     }
-    else return NULL;
+    else return nullptr;
 }
+
+void World::setGuiWatch(XY xy){
+    auto snake = getSnake(xy);
+    if (snake){
+        guiSnakePtr = snake;
+    }
+}
+
+Snake** World::getGuiSnakePtr(){return &guiSnakePtr;}
 
 int World::boundsCheck(XY xy){
     if (xy.y >= 0 && xy.x >= 0 && xy.y < (int)world.size() && xy.x < (int)world[0].size()){

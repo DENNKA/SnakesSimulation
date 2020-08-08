@@ -2,6 +2,7 @@
 
 Simulation::Simulation() : world(100, 65), render(window, world, gui), gui(*this, world, render){
     render.initButtonsName();
+    gui.setSnake(world.getGuiSnakePtr());
 }
 
 void Simulation::start(){
@@ -41,11 +42,7 @@ void Simulation::start(){
                     sf::Vector2i cursorClick = sf::Mouse::getPosition(window);
                     XY xy = render.getXYSquare(static_cast<XY>(cursorClick));
                     gui.click((XY)cursorClick, leftClick);
-                    Snake* snake = world.getSnake(xy);
-                    if (snake){
-                        snake->addOneTail();
-
-                    }
+                    world.setGuiWatch(xy);
                 }
                 break;
                 default:;
@@ -84,6 +81,9 @@ void Simulation::start(){
         if (simulation){
             world.update();
         }
+
+        gui.update();
+
         sf::Vector2i cursor = sf::Mouse::getPosition(window);
         XY cursorSquare = render.getXYSquare(cursor);
         render.render(cursorSquare);

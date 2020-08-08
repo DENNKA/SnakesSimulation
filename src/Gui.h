@@ -19,7 +19,7 @@ enum class guiWindow{
 class Gui{
     public:
         Gui(Simulation& simulation, World& world, render::Render& render);
-        void setSnake(Snake* snake);
+        void setSnake(Snake** snakePtr);
         void update();
         void click(XY cursor, bool leftClick);
         std::list<Text>& getTexts();  //don't use vector because pointers become invalidate
@@ -45,7 +45,7 @@ class Gui{
         std::vector<Button> buttons;
         std::list<Text> texts;
 
-        Snake* snake;
+        Snake** snakePtr = nullptr;
 
         Simulation& simulation;
         World& world;

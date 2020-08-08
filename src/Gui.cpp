@@ -29,9 +29,18 @@ Gui::Gui(Simulation& simulation, World& world, render::Render& render) : simulat
     //updateSize();
 }
 
-void Gui::setSnake(Snake* snake){this->snake = snake;}
+void Gui::setSnake(Snake** snakePtr2){this->snakePtr = snakePtr2;}
 
 void Gui::update(){
+    for (auto& it : texts){
+        it.update();
+    }
+    if (snakePtr && *snakePtr){
+        Snake& snake = **snakePtr;
+        d(snake.getLive())
+        ; // при удалении snake отправить в гуй и сохранить
+
+    }
 
 }
 
