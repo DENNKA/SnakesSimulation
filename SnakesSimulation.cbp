@@ -16,6 +16,9 @@
 					<Add directory="src" />
 				</Compiler>
 				<Linker>
+					<Add option="-static-libstdc++" />
+					<Add option="-static-libgcc" />
+					<Add option="-static" />
 					<Add library="sfml-graphics-d" />
 					<Add library="sfml-window-d" />
 					<Add library="sfml-system-d" />
@@ -55,6 +58,8 @@
 		<Unit filename="src/Gui.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="src/GuiComponent.cpp" />
+		<Unit filename="src/GuiComponent.h" />
 		<Unit filename="src/Render.cpp" />
 		<Unit filename="src/Render.h" />
 		<Unit filename="src/Simulation.cpp" />
@@ -63,6 +68,8 @@
 		</Unit>
 		<Unit filename="src/Snake.cpp" />
 		<Unit filename="src/Snake.h" />
+		<Unit filename="src/Text.cpp" />
+		<Unit filename="src/Text.h" />
 		<Unit filename="src/World.cpp" />
 		<Unit filename="src/World.h" />
 		<Unit filename="src/XY.h">
