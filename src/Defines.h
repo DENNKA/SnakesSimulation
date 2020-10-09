@@ -2,10 +2,9 @@
 #define DEFINES_H_INCLUDED
 
 #include <iostream>
-#include <cstring>
 
 #define DEBUG
-#define d(x) std::cout<<#x<<" = "<<x<<std::endl;
-#define m(x) std::cout<<x<<std::endl;
+#define d(x) std::cout<<#x<<" = "<<x<<endl;
+#define msg(x) std::cout<<x<<endl;
 
 #endif // DEFINES_H_INCLUDED

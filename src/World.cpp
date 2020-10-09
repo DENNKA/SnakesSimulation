@@ -1,5 +1,4 @@
 #include "World.h"
-#include "Defines.h"
 
 World::World(int worldSizeX, int worldSizeY){
     setSize(worldSizeX, worldSizeY);

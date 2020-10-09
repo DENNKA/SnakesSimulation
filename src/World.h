@@ -5,6 +5,7 @@
 #include <list>
 #include <cstdlib>  //rand()
 #include <ctime>
+#include <cstring>
 
 #include "Snake.h"
 #include "Defines.h"
